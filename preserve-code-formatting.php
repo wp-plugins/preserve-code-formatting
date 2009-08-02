@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Preserve Code Formatting
-Version: 2.5
+Version: 2.5.1
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -330,7 +330,7 @@ END;
 	} //end prep_code()
 
 	function preserve_code_formatting( $text ) {
-		$text = str_replace(array('$', "'"), array('&#36&;', '&#39&;'), stripslashes_deep($text));
+		$text = str_replace(array('$', "'"), array('&#36&;', '&#39&;'), $text);
 		$text = $this->prep_code($text);
 		$text = str_replace(array('&#36&;', '&#39&;', '&lt; ?php'), array('$', "'", '&lt;?php'), $text);
 		return $text;
@@ -348,7 +348,7 @@ END;
 			$codes = preg_split("/(<{$tag}[^>]*>.*<\\/{$tag}>)/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
 				if ( preg_match("/^<{$tag}[^>]*>(.*)<\\/{$tag}>/Us", $code, $match) )
-					$code = "[[{$tag}]]" . base64_encode(addslashes($match[1]))  . "[[/{$tag}]]";
+					$code = "[[{$tag}]]" . base64_encode(addslashes(gzcompress(serialize($match[1]),9)))  . "[[/{$tag}]]";
 				$result .= $code;
 			}
 		}
@@ -356,7 +356,6 @@ END;
 	} //end preserve_preprocess()
 
 	function preserve_postprocess( $content, $preserve = false ) {
-		global $wpdb;
 		$options = $this->get_options();
 		$preserve_tags = $options['preserve_tags'];
 		$wrap_multiline_code_in_pre = $options['wrap_multiline_code_in_pre'];
@@ -369,9 +368,8 @@ END;
 			$codes = preg_split("/(\\[\\[{$tag}\\]\\].*\\[\\[\\/{$tag}\\]\\])/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
 				if ( preg_match("/\\[\\[{$tag}\\]\\](.*)\\[\\[\\/{$tag}\\]\\]/Us", $code, $match) ) {
-					$data = base64_decode($match[1]);
+					$data = unserialize(gzuncompress(stripslashes(base64_decode($match[1]))));
 					if ( $preserve ) $data = $this->preserve_code_formatting($data);
-					else $data = $wpdb->escape($data);
 					$code = "<$tag>$data</$tag>";
 					if ( $preserve && $wrap_multiline_code_in_pre && preg_match("/\n/", $data) )
 						$code = '<pre>' . $code . '</pre>';
