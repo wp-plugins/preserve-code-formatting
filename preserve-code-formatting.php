@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Preserve Code Formatting
-Version: 2.5.1
+Version: 2.5.2-beta
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -347,8 +347,9 @@ END;
 			}
 			$codes = preg_split("/(<{$tag}[^>]*>.*<\\/{$tag}>)/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
-				if ( preg_match("/^<{$tag}[^>]*>(.*)<\\/{$tag}>/Us", $code, $match) )
-					$code = "[[{$tag}]]" . base64_encode(addslashes(gzcompress(serialize($match[1]),9)))  . "[[/{$tag}]]";
+				if ( preg_match("/^<({$tag}[^>]*)>(.*)<\\/{$tag}>/Us", $code, $match) ) {
+					$code = "[[{$match[1]}]]" . base64_encode(addslashes(gzdeflate(serialize($match[2]),1)))  . "[[/{$tag}]]";
+				}
 				$result .= $code;
 			}
 		}
@@ -365,12 +366,12 @@ END;
 				$content = $result;
 				$result = '';
 			}
-			$codes = preg_split("/(\\[\\[{$tag}\\]\\].*\\[\\[\\/{$tag}\\]\\])/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+			$codes = preg_split("/(\\[\\[{$tag}[^\\]]*\\]\\].*\\[\\[\\/{$tag}\\]\\])/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
-				if ( preg_match("/\\[\\[{$tag}\\]\\](.*)\\[\\[\\/{$tag}\\]\\]/Us", $code, $match) ) {
-					$data = unserialize(gzuncompress(stripslashes(base64_decode($match[1]))));
+				if ( preg_match("/\\[\\[({$tag}[^\\]]*)\\]\\](.*)\\[\\[\\/{$tag}\\]\\]/Us", $code, $match) ) {
+					$data = unserialize(gzinflate(stripslashes(base64_decode($match[2]))));
 					if ( $preserve ) $data = $this->preserve_code_formatting($data);
-					$code = "<$tag>$data</$tag>";
+					$code = "<{$match[1]}>$data</$tag>";
 					if ( $preserve && $wrap_multiline_code_in_pre && preg_match("/\n/", $data) )
 						$code = '<pre>' . $code . '</pre>';
 				}
