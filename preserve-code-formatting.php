@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Preserve Code Formatting
-Version: 2.5.2-beta
+Version: 2.5.2
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting
 Author: Scott Reilly
 Author URI: http://coffee2code.com
