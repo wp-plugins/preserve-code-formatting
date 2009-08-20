@@ -3,9 +3,9 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: code, formatting, post body, content, display, writing, escape, coffee2code
 Requires at least: 2.6
-Tested up to: 2.8.3
-Stable tag: 2.5.2
-Version: 2.5.2
+Tested up to: 2.8.4
+Stable tag: 2.5.3
+Version: 2.5.3
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
 
@@ -63,6 +63,11 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 1. A screenshot of the plugin's admin options page.
 
 == Changelog ==
+
+= 2.5.3 =
+* Fixed recently introduced bug affecting occasional code preservation by using a more robust alternative approach
+* Fixed "Settings" link for plugin in plugin listing, which lead to blank settings page
+* Changed help text for preservable tags settings input to be more explicit
 
 = 2.5.2 =
 * Fix to retain any attributes defined for tags being preserved

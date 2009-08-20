@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Preserve Code Formatting
-Version: 2.5.3-beta
+Version: 2.5.3
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -93,7 +93,7 @@ class PreserveCodeFormatting {
 			// input can be 'checkbox', 'text', 'hidden', or 'none'
 			'preserve_tags' => array('input' => 'text', 'default' => array('code', 'pre'), 'datatype' => 'array',
 				'label' => 'Tags that will have their contents preserved',
-				'help' => 'Space and/or comma-separated list of values.'),
+				'help' => 'Space and/or comma-separated list of HTML tag names.'),
 			'preserve_in_comments' => array('input' => 'checkbox', 'default' => true,
 				'label' => 'Preserve code in comments?',
 				'help' => 'Preserve code posted by visitors in comments?'),
@@ -148,7 +148,7 @@ class PreserveCodeFormatting {
 	}
 
 	function plugin_action_links( $action_links ) {
-		$settings_link = '<a href="options.php?page='.$this->plugin_basename.'">' . __('Settings') . '</a>';
+		$settings_link = '<a href="options-general.php?page='.$this->plugin_basename.'">' . __('Settings') . '</a>';
 		array_unshift( $action_links, $settings_link );
 
 		return $action_links;
