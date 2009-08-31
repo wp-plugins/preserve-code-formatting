@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Preserve Code Formatting
-Version: 2.5.3
+Version: 2.5.4
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -349,7 +349,7 @@ END;
 			$codes = preg_split("/(<{$tag}[^>]*>.*<\\/{$tag}>)/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
 				if ( preg_match("/^<({$tag}[^>]*)>(.*)<\\/{$tag}>/Us", $code, $match) ) {
-					$code = "[[{$match[1]}]]" . base64_encode(chunk_split($match[2], 76, $this->chunk_split_token))  . "[[/{$tag}]]";
+					$code = "[[{$match[1]}]]" . base64_encode(addslashes(chunk_split(serialize($match[2]), 76, $this->chunk_split_token)))  . "[[/{$tag}]]";
 				}
 				$result .= $code;
 			}
@@ -370,7 +370,7 @@ END;
 			$codes = preg_split("/(\\[\\[{$tag}[^\\]]*\\]\\].*\\[\\[\\/{$tag}\\]\\])/Us", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 			foreach ( $codes as $code ) {
 				if ( preg_match("/\\[\\[({$tag}[^\\]]*)\\]\\](.*)\\[\\[\\/{$tag}\\]\\]/Us", $code, $match) ) {
-					$data = str_replace($this->chunk_split_token, '', base64_decode($match[2]));
+					$data = unserialize(str_replace($this->chunk_split_token, '', stripslashes(base64_decode($match[2]))));
 					if ( $preserve ) $data = $this->preserve_code_formatting($data);
 					$code = "<{$match[1]}>$data</$tag>";
 					if ( $preserve && $wrap_multiline_code_in_pre && preg_match("/\n/", $data) )
