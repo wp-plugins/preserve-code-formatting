@@ -2,12 +2,13 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: code, formatting, post body, content, display, writing, escape, coffee2code
-Requires at least: 2.6
-Tested up to: 2.8.4
-Stable tag: 2.5.4
-Version: 2.5.4
+Requires at least: 2.8
+Tested up to: 3.0.1
+Stable tag: 3.0
+Version: 3.0
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
+
 
 == Description ==
 
@@ -45,12 +46,14 @@ INSERT INTO $tablepostmeta
 VALUES ('$post_id','link','$extended')
 &#8213;);`
 
+
 == Installation ==
 
-1. Unzip `preserve-code-formatting.zip` inside the `/wp-content/plugins/` directory, or upload `preserve-code-formatting.php` to `/wp-content/plugins/`
+1. Unzip `preserve-code-formatting.zip` inside the `/wp-content/plugins/` directory (or install via the built-in WordPress plugin installer)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
 1. Go to the `Settings` -> `Code Formatting` admin settings page (which you can also get to via the Settings link next to the plugin on the Manage Plugins page) and customize the settings.
 1. Write a post with code contained within `<code>` and `</code>` tags (using the HTML editor, not the Visual editor).
+
 
 == Frequently Asked Questions ==
 
@@ -58,11 +61,34 @@ VALUES ('$post_id','link','$extended')
 
 The visual editor has a tendency to screw up some of your intent, especially when you are attempting to include raw code.  This plugin does not make any claims about working when you create posts with the visual editor enabled.
 
+
 == Screenshots ==
 
 1. A screenshot of the plugin's admin options page.
 
+
 == Changelog ==
+
+= 3.0 =
+* Re-implementation by extending C2C_Plugin_016, which among other things adds support for:
+    * Reset of options to default values
+    * Better sanitization of input values
+    * Offload of core/basic functionality to generic plugin framework
+    * Additional hooks for various stages/places of plugin operation
+    * Easier localization support
+* Full localization support
+* Change storing plugin instance in global variable to $c2c_preserve_code_formatting (instead of $preserve_code_formatting), to allow for external manipulation
+* Rename class from 'PreserveCodeFormatting' to 'c2c_PreserveCodeFormatting'
+* Remove docs from top of plugin file (all that and more are in readme.txt)
+* Note compatibility with WP 2.9+, 3.0+
+* Drop compatibility with versions of WP older than 2.8
+* Add PHPDoc documentation
+* Minor tweaks to code formatting (spacing)
+* Add package info to top of plugin file
+* Add Upgrade Notice section to readme.txt
+* Update copyright date
+* Remove trailing whitespace
+* Add .pot file
 
 = 2.5.4 =
 * Fixed some borked code preservation by restoring some processing removed in previous release
@@ -106,3 +132,9 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 
 = 0.9 =
 * Initial release
+
+
+== Upgrade Notice ==
+
+= 3.0 =
+Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.
