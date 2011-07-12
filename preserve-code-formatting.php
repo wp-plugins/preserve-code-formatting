@@ -1,12 +1,12 @@
 <?php
 /**
- * @package Custom_Post_Limits
+ * @package Preserve_Code_Formatting
  * @author Scott Reilly
- * @version 3.0
+ * @version 3.1
  */
 /*
 Plugin Name: Preserve Code Formatting
-Version: 3.0
+Version: 3.1
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -16,16 +16,19 @@ Description: Preserve formatting of code for display by preventing its modificat
 NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of <code> tags.  I do not
 offer any support for those who have the visual editor active.
 
-Compatible with WordPress 2.8+, 2.9+, 3.0+.
+Compatible with WordPress 3.0+, 3.1+, 3.2+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/preserve-code-formatting/
 
+TODO:
+	* Update screenshots for WP 3.2
+
 */
 
 /*
-Copyright (c) 2004-2010 by Scott Reilly (aka coffee2code)
+Copyright (c) 2004-2011 by Scott Reilly (aka coffee2code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -40,22 +43,54 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-if ( !class_exists( 'c2c_PreserveCodeFormatting' ) ) :
+if ( ! class_exists( 'c2c_PreserveCodeFormatting' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
-	var $admin_options_name = 'c2c_preserve_code_formatting';
-	var $nonce_field = 'update-preserve_code_formatting';
-	var $show_admin = true;	// Change this to false if you don't want the plugin's admin page shown.
-	var $config = array();
-	var $options = array(); // Don't use this directly
-	var $plugin_basename = '';
-	var $menu_name = '';
-	var $chunk_split_token = '{[&*&]}';
+class c2c_PreserveCodeFormatting extends C2C_Plugin_023 {
+	public static $instance;
 
-	function c2c_PreserveCodeFormatting() {
-		$this->C2C_Plugin_016( '3.0', 'preserve-code-formatting', 'c2c', __FILE__, array() );
+	private $chunk_split_token = '{[&*&]}';
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		$this->c2c_PreserveCodeFormatting();
+	}
+
+	public function c2c_PreserveCodeFormatting() {
+		// Be a singleton
+		if ( ! is_null( self::$instance ) )
+			return;
+
+		$this->C2C_Plugin_023( '3.1', 'preserve-code-formatting', 'c2c', __FILE__, array() );
+		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
+		self::$instance = $this;
+	}
+
+	/**
+	 * Handles activation tasks, such as registering the uninstall hook.
+	 *
+	 * @since 3.1
+	 *
+	 * @return void
+	 */
+	public function activation() {
+		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
+	}
+
+	/**
+	 * Handles uninstallation tasks, such as deleting plugin options.
+	 *
+	 * This can be overridden.
+	 *
+	 * @since 3.1
+	 *
+	 * @return void
+	 */
+	public function uninstall() {
+		delete_option( 'c2c_preserve_code_formatting' );
 	}
 
 	/**
@@ -63,8 +98,8 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 *
 	 * @return void
 	 */
-	function load_config() {
-		$this->name = __( 'Preserve Code Formatting', $this->textdomain );
+	public function load_config() {
+		$this->name      = __( 'Preserve Code Formatting', $this->textdomain );
 		$this->menu_name = __( 'Code Formatting', $this->textdomain );
 
 		$this->config = array(
@@ -92,23 +127,23 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 *
 	 * @return void
 	 */
-	function register_filters() {
+	public function register_filters() {
 		$options = $this->get_options();
 
-		add_filter( 'the_content', array( &$this, 'preserve_preprocess' ), 2 );
-		add_filter( 'the_content', array( &$this, 'preserve_postprocess_and_preserve'), 100 );
-		add_filter( 'content_save_pre', array( &$this, 'preserve_preprocess' ), 2 );
-		add_filter( 'content_save_pre', array( &$this, 'preserve_postprocess' ), 100 );
+		add_filter( 'the_content',             array( &$this, 'preserve_preprocess' ), 2 );
+		add_filter( 'the_content',             array( &$this, 'preserve_postprocess_and_preserve'), 100 );
+		add_filter( 'content_save_pre',        array( &$this, 'preserve_preprocess' ), 2 );
+		add_filter( 'content_save_pre',        array( &$this, 'preserve_postprocess' ), 100 );
 
-		add_filter( 'the_excerpt', array( &$this, 'preserve_preprocess' ), 2 );
-		add_filter( 'the_excerpt', array( &$this, 'preserve_postprocess_and_preserve' ), 100 );
-		add_filter( 'excerpt_save_pre', array( &$this, 'preserve_preprocess' ), 2 );
-		add_filter( 'excerpt_save_pre', array( &$this, 'preserve_postprocess' ), 100 );
+		add_filter( 'the_excerpt',             array( &$this, 'preserve_preprocess' ), 2 );
+		add_filter( 'the_excerpt',             array( &$this, 'preserve_postprocess_and_preserve' ), 100 );
+		add_filter( 'excerpt_save_pre',        array( &$this, 'preserve_preprocess' ), 2 );
+		add_filter( 'excerpt_save_pre',        array( &$this, 'preserve_postprocess' ), 100 );
 
 		// Comment out these next lines if you don't want to allow preserve code formatting for comments.
 		if ( $options['preserve_in_comments'] ) {
-			add_filter( 'comment_text', array( &$this, 'preserve_preprocess' ), 2 );
-			add_filter( 'comment_text', array( &$this, 'preserve_postprocess_and_preserve' ), 100 );
+			add_filter( 'comment_text',        array( &$this, 'preserve_preprocess' ), 2 );
+			add_filter( 'comment_text',        array( &$this, 'preserve_postprocess_and_preserve' ), 100 );
 			add_filter( 'pre_comment_content', array( &$this, 'preserve_preprocess' ), 2 );
 			add_filter( 'pre_comment_content', array( &$this, 'preserve_postprocess' ), 100 );
 		}
@@ -119,7 +154,7 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 *
 	 * @return void (Text will be echoed.)
 	 */
-	function options_page_description() {
+	public function options_page_description() {
 		$options = $this->get_options();
 		parent::options_page_description( __( 'Preserve Code Formatting Settings', $this->textdomain ) );
 		echo '<p>' . __( 'Preserve formatting for text within &lt;code> and &lt;pre> tags (other tags can be defined as well). Helps to preserve code indentation, multiple spaces, prevents WP\'s fancification of text (ie. ensures quotes don\'t become curly, etc).', $this->textdomain ) . '</p>';
@@ -127,12 +162,12 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	}
 
 	/**
-	 * Preps code
+	 * Preps code.
 	 *
 	 * @param string $text Text to prep
 	 * @return string The prepped text
 	 */
-	function prep_code( $text ) {
+	public function prep_code( $text ) {
 		$options = $this->get_options();
 		$text = preg_replace( "/(\r\n|\n|\r)/", "\n", $text );
 		$text = preg_replace( "/\n\n+/", "\n\n", $text );
@@ -152,7 +187,7 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 * @param string $text Text with code formatting to preserve
 	 * @return string The text with code formatting preserved
 	 */
-	function preserve_code_formatting( $text ) {
+	public function preserve_code_formatting( $text ) {
 		$text = str_replace( array( '$', "'" ), array( '&#36&;', '&#39&;' ), $text );
 		$text = $this->prep_code( $text );
 		$text = str_replace( array( '&#36&;', '&#39&;', '&lt; ?php' ), array( '$', "'", '&lt;?php' ), $text );
@@ -165,12 +200,12 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 * @param string $content Text with code formatting to preserve
 	 * @return string The text with code formatting preprocessed
 	 */
-	function preserve_preprocess( $content ) {
+	public function preserve_preprocess( $content ) {
 		$options = $this->get_options();
 		$preserve_tags = $options['preserve_tags'];
 		$result = '';
 		foreach ( $preserve_tags as $tag ) {
-			if ( !empty( $result ) ) {
+			if ( ! empty( $result ) ) {
 				$content = $result;
 				$result = '';
 			}
@@ -194,13 +229,13 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 * @param bool $preserve (optional) Preserve?
 	 * @return string The text with code formatting post-processed
 	 */
-	function preserve_postprocess( $content, $preserve = false ) {
+	public function preserve_postprocess( $content, $preserve = false ) {
 		$options = $this->get_options();
 		$preserve_tags = $options['preserve_tags'];
 		$wrap_multiline_code_in_pre = $options['wrap_multiline_code_in_pre'];
 		$result = '';
 		foreach ( $preserve_tags as $tag ) {
-			if ( !empty( $result ) ) {
+			if ( ! empty( $result ) ) {
 				$content = $result;
 				$result = '';
 			}
@@ -226,12 +261,14 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_016 {
 	 * @param string $content Text with code formatting to post-process and preserve
 	 * @return string The text with code formatting post-processed and preserved
 	 */
-	function preserve_postprocess_and_preserve( $content ) {
+	public function preserve_postprocess_and_preserve( $content ) {
 		return $this->preserve_postprocess( $content, true );
 	}
 
 } // end c2c_PreserveCodeFormatting
 
+// NOTICE: The 'c2c_preserve_code_formatting' global is deprecated and will be removed in the plugin's version 3.2.
+// Instead, use: c2c_PreserveCodeFormatting::$instance
 $GLOBAL['c2c_preserve_code_formatting'] = new c2c_PreserveCodeFormatting();
 
 endif; // end if !class_exists()

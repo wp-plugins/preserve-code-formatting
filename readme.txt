@@ -2,10 +2,10 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: code, formatting, post body, content, display, writing, escape, coffee2code
-Requires at least: 2.8
-Tested up to: 3.0.1
-Stable tag: 3.0
-Version: 3.0
+Requires at least: 3.0
+Tested up to: 3.2
+Stable tag: 3.1
+Version: 3.1
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
 
@@ -32,19 +32,28 @@ Keep these things in mind:
 * By default this plugin filters 'the_content' (post content), 'the_excerpt' (post excerpt), and 'get_comment_text (comment content)'.
 
 Example:
+
 A post containing this within `<code></code>`:
-`$wpdb->query("
+
+`
+$wpdb->query("
         INSERT INTO $tablepostmeta
         (post_id,meta_key,meta_value)
         VALUES ('$post_id','link','$extended')
-");`
+");
+`
 
 Would, with this plugin enabled, look in a browser pretty much how it does above, instead of like:
-`$wpdb->query(&#8212;
+
+`
+$wpdb->query(&#8212;
 INSERT INTO $tablepostmeta
 (post_id,meta_key,meta_value)
 VALUES ('$post_id','link','$extended')
-&#8213;);`
+&#8213;);
+`
+
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -68,6 +77,20 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 
 
 == Changelog ==
+
+= 3.1 =
+* Fix to properly register activation and uninstall hooks
+* Update plugin framework to version v023
+* Save a static version of itself in class variable $instance
+* Deprecate use of global variable $c2c_preserve_code_formatting to store instance
+* Add __construct(), activation(), and uninstall()
+* Explicitly declare functions public and variable private
+* Remove declarations of instance variable which have since become part of the plugin framework
+* Note compatibility through WP 3.2+
+* Drop compatibility with version of WP older than 3.0
+* Minor code formatting changes (spacing)
+* Update copyright date (2011)
+* Add plugin homepage and author links in description in readme.txt
 
 = 3.0 =
 * Re-implementation by extending C2C_Plugin_016, which among other things adds support for:
@@ -135,6 +158,9 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 
 
 == Upgrade Notice ==
+
+= 3.0.1 =
+Trivial update: updated plugin framework to v021; noted compatibility with WP 3.1+ and updated copyright date.
 
 = 3.0 =
 Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.
