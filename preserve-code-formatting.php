@@ -2,33 +2,30 @@
 /**
  * @package Preserve_Code_Formatting
  * @author Scott Reilly
- * @version 3.1
+ * @version 3.2
  */
 /*
 Plugin Name: Preserve Code Formatting
-Version: 3.1
+Version: 3.2
 Plugin URI: http://coffee2code.com/wp-plugins/preserve-code-formatting/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
 Text Domain: preserve-code-formatting
+Domain Path: /lang/
 Description: Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
 
 NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of <code> tags.  I do not
 offer any support for those who have the visual editor active.
 
-Compatible with WordPress 3.0+, 3.1+, 3.2+.
+Compatible with WordPress 3.1+, 3.2+, 3.3+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/preserve-code-formatting/
-
-TODO:
-	* Update screenshots for WP 3.2
-
 */
 
 /*
-Copyright (c) 2004-2011 by Scott Reilly (aka coffee2code)
+Copyright (c) 2004-2012 by Scott Reilly (aka coffee2code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -47,7 +44,7 @@ if ( ! class_exists( 'c2c_PreserveCodeFormatting' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_PreserveCodeFormatting extends C2C_Plugin_023 {
+class c2c_PreserveCodeFormatting extends C2C_Plugin_032 {
 	public static $instance;
 
 	private $chunk_split_token = '{[&*&]}';
@@ -64,7 +61,7 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_023 {
 		if ( ! is_null( self::$instance ) )
 			return;
 
-		$this->C2C_Plugin_023( '3.1', 'preserve-code-formatting', 'c2c', __FILE__, array() );
+		parent::__construct( '3.2', 'preserve-code-formatting', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 		self::$instance = $this;
 	}
@@ -140,7 +137,6 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_023 {
 		add_filter( 'excerpt_save_pre',        array( &$this, 'preserve_preprocess' ), 2 );
 		add_filter( 'excerpt_save_pre',        array( &$this, 'preserve_postprocess' ), 100 );
 
-		// Comment out these next lines if you don't want to allow preserve code formatting for comments.
 		if ( $options['preserve_in_comments'] ) {
 			add_filter( 'comment_text',        array( &$this, 'preserve_preprocess' ), 2 );
 			add_filter( 'comment_text',        array( &$this, 'preserve_postprocess_and_preserve' ), 100 );
@@ -267,9 +263,8 @@ class c2c_PreserveCodeFormatting extends C2C_Plugin_023 {
 
 } // end c2c_PreserveCodeFormatting
 
-// NOTICE: The 'c2c_preserve_code_formatting' global is deprecated and will be removed in the plugin's version 3.2.
-// Instead, use: c2c_PreserveCodeFormatting::$instance
-$GLOBAL['c2c_preserve_code_formatting'] = new c2c_PreserveCodeFormatting();
+// To access plugin object instance use: c2c_PreserveCodeFormatting::$instance
+new c2c_PreserveCodeFormatting();
 
 endif; // end if !class_exists()
 

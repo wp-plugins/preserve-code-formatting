@@ -2,10 +2,10 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: code, formatting, post body, content, display, writing, escape, coffee2code
-Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 3.1
-Version: 3.1
+Requires at least: 3.1
+Tested up to: 3.3
+Stable tag: 3.2
+Version: 3.2
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
 
@@ -14,26 +14,26 @@ Preserve formatting of code for display by preventing its modification by WordPr
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
 
-NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of `<code>` tags.  I do not offer any support for those who have the visual editor active.
+NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of `code` tags.  I do not offer any support for those who have the visual editor active.
 
 Notes:
 
-Basically, you can just paste code into `<code>`, `<pre>`, and/or other tags you additionally specify and 
-this plugin will:
+Basically, you can just paste code into `code`, `pre`, and/or other tags you additionally specify and this plugin will:
 
 * Prevent WordPress from HTML-encoding text (i.e. single- and double-quotes will not become curly; "--" and "---" will not become en dash and em dash, respectively; "..." will not become a horizontal ellipsis, etc)
 * Prevent most other plugins from modifying preserved code
+* Prevent shortcodes from being processed
 * Optionally preserve whitespace (in a variety of methods)
 * Optionally preserve code added in comments
 
 Keep these things in mind:
 
-* ALL embedded HTML tags and HTML entities will be rendered as text to browsers, appearing exactly as you wrote them (including any `<br />`).
+* ALL embedded HTML tags and HTML entities will be rendered as text to browsers, appearing exactly as you wrote them (including any `br` tags).
 * By default this plugin filters 'the_content' (post content), 'the_excerpt' (post excerpt), and 'get_comment_text (comment content)'.
 
 Example:
 
-A post containing this within `<code></code>`:
+A post containing this within `code` tags:
 
 `
 $wpdb->query("
@@ -53,15 +53,16 @@ VALUES ('$post_id','link','$extended')
 &#8213;);
 `
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Plugin Directory Page](http://wordpress.org/extend/plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
 
+1. Whether installing or updating, whether this plugin or any other, it is always advisable to back-up your data before starting
 1. Unzip `preserve-code-formatting.zip` inside the `/wp-content/plugins/` directory (or install via the built-in WordPress plugin installer)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
 1. Go to the `Settings` -> `Code Formatting` admin settings page (which you can also get to via the Settings link next to the plugin on the Manage Plugins page) and customize the settings.
-1. Write a post with code contained within `<code>` and `</code>` tags (using the HTML editor, not the Visual editor).
+1. Write a post with code contained within opening and closing `code` tags (using the HTML editor, not the Visual editor).
 
 
 == Frequently Asked Questions ==
@@ -70,6 +71,10 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatt
 
 The visual editor has a tendency to screw up some of your intent, especially when you are attempting to include raw code.  This plugin does not make any claims about working when you create posts with the visual editor enabled.
 
+= Can I put shortcode examples within code tags and not have them be evaluated by WordPress? =
+
+Yes, shortcodes within code tags (or any tag processed by this plugin) will be output as pure text and not be processed as shortcodes by WordPress.
+
 
 == Screenshots ==
 
@@ -77,6 +82,22 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 
 
 == Changelog ==
+
+= 3.2 =
+* Fix bug with settings form not appearing in MS
+* Update plugin framework to 032
+* Remove support for 'c2c_preserve_code_formatting' global
+* Note compatibility through WP 3.3+
+* Drop support for versions of WP older than 3.1
+* Change parent constructor invocation
+* Create 'lang' subdirectory and move .pot file into it
+* Regenerate .pot
+* Add 'Domain Path' directive to top of main plugin file
+* Add link to plugin directory page to readme.txt
+* Add text and FAQ question regarding how shortcodes are prevented from being evaluated
+* Tweak installation instructions in readme.txt
+* Update screenshot for WP 3.3
+* Update copyright date (2012)
 
 = 3.1 =
 * Fix to properly register activation and uninstall hooks
@@ -158,6 +179,12 @@ The visual editor has a tendency to screw up some of your intent, especially whe
 
 
 == Upgrade Notice ==
+
+= 3.2 =
+Recommended update. Highlights: fixed bug with settings not appearing in MS; updated plugin framework; noted compatibility with WP 3.3+; dropped compatibility with versions of WP older than 3.1.
+
+= 3.1 =
+Recommended update. Highlights: fixed numerous bugs; added a debug mode; updated compatibility through WP 3.2; dropped compatibility with version of WP older than 3.0; updated plugin framework; and more.
 
 = 3.0.1 =
 Trivial update: updated plugin framework to v021; noted compatibility with WP 3.1+ and updated copyright date.
