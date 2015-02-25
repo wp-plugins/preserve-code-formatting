@@ -14,7 +14,7 @@ class Preserve_Code_Formatting_Test extends WP_UnitTestCase {
 
 
 
-	/**
+	/*
 	 *
 	 * DATA PROVIDERS
 	 *
@@ -38,7 +38,7 @@ class Preserve_Code_Formatting_Test extends WP_UnitTestCase {
 
 
 
-	/**
+	/*
 	 *
 	 * HELPER FUNCTIONS
 	 *
@@ -65,7 +65,7 @@ class Preserve_Code_Formatting_Test extends WP_UnitTestCase {
 
 
 
-	/**
+	/*
 	 *
 	 * TESTS
 	 *

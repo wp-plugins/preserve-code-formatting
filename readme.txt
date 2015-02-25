@@ -5,8 +5,8 @@ Tags: code, formatting, post body, content, display, writing, escape, coffee2cod
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 3.5
+Tested up to: 4.1
+Stable tag: 3.6
 
 Preserve formatting of code for display by preventing its modification by WordPress and other plugins while also retaining whitespace.
 
@@ -53,7 +53,7 @@ VALUES ('$post_id','link','$extended')
 &#8213;);
 `
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Plugin Directory Page](http://wordpress.org/plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Plugin Directory Page](https://wordpress.org/plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -86,6 +86,19 @@ Yes.
 
 
 == Changelog ==
+
+= 3.6 (2015-02-24) =
+* Add more unit tests
+* Update plugin framework to 039
+* Explicitly declare `activation()` and `uninstall()` static
+* Reformat plugin header
+* Minor code reformatting (spacing, bracing)
+* Change documentation links to wp.org to be https
+* Minor documentation spacing changes throughout
+* Note compatibility through WP 4.1+
+* Update copyright date (2015)
+* Add plugin icon
+* Regenerate .pot
 
 = 3.5 (2014-01-11) =
 * Add setting to control if code should be preserved in posts (default is true)
@@ -216,6 +229,9 @@ Yes.
 
 
 == Upgrade Notice ==
+
+= 3.6 =
+Minor update: added more unit tests; updated plugin framework to 039; noted compatibility through WP 4.1+; updated copyright date (2015); added plugin icon
 
 = 3.5 =
 Recommended update: fix bug where 'pre' tag could get wrapped in '<pre>' tag; added setting to disable preserving code in posts; added unit tests; updated plugin framework; compatibility now WP 3.6-3.8+
