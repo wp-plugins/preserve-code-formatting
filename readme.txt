@@ -88,6 +88,7 @@ Yes.
 == Changelog ==
 
 = 3.6 (2015-02-24) =
+* Cast some variable as array to avoid potential PHP warnings
 * Add more unit tests
 * Update plugin framework to 039
 * Explicitly declare `activation()` and `uninstall()` static
