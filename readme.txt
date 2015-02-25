@@ -1,20 +1,20 @@
 === Preserve Code Formatting ===
 Contributors: coffee2code
-Donate link: http://coffee2code.com/donate
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
 Tags: code, formatting, post body, content, display, writing, escape, coffee2code
-Requires at least: 3.1
-Tested up to: 3.3
-Stable tag: 3.2
-Version: 3.2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 3.6
+Tested up to: 4.1
+Stable tag: 3.6
 
-Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
-
+Preserve formatting of code for display by preventing its modification by WordPress and other plugins while also retaining whitespace.
 
 == Description ==
 
-Preserve formatting of code for display by preventing its modification by WordPress and other plugins while retaining original whitespace and characters.
+This plugin preserves formatting of code for display by preventing its modification by WordPress and other plugins while also retaining whitespace.
 
-NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of `code` tags.  I do not offer any support for those who have the visual editor active.
+NOTE: Use of the visual text editor will pose problems as it can mangle your intent in terms of `code` tags. I strongly suggest you not use the visual editor in conjunction with this plugin as I have taken no effort to make the two compatible.
 
 Notes:
 
@@ -53,7 +53,7 @@ VALUES ('$post_id','link','$extended')
 &#8213;);
 `
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Plugin Directory Page](http://wordpress.org/extend/plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatting/) | [Plugin Directory Page](https://wordpress.org/plugins/preserve-code-formatting/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -69,11 +69,15 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/preserve-code-formatt
 
 = Why does my code still display all funky?  (by the way, I'm using the visual editor) =
 
-The visual editor has a tendency to screw up some of your intent, especially when you are attempting to include raw code.  This plugin does not make any claims about working when you create posts with the visual editor enabled.
+The visual editor has a tendency to screw up some of your intent, especially when you are attempting to include raw code. This plugin does not make any claims about working when you create posts with the visual editor enabled.
 
 = Can I put shortcode examples within code tags and not have them be evaluated by WordPress? =
 
 Yes, shortcodes within code tags (or any tag processed by this plugin) will be output as pure text and not be processed as shortcodes by WordPress.
+
+= Does this plugin include unit tests? =
+
+Yes.
 
 
 == Screenshots ==
@@ -82,6 +86,52 @@ Yes, shortcodes within code tags (or any tag processed by this plugin) will be o
 
 
 == Changelog ==
+
+= 3.6 (2015-02-24) =
+* Add more unit tests
+* Update plugin framework to 039
+* Explicitly declare `activation()` and `uninstall()` static
+* Reformat plugin header
+* Minor code reformatting (spacing, bracing)
+* Change documentation links to wp.org to be https
+* Minor documentation spacing changes throughout
+* Note compatibility through WP 4.1+
+* Update copyright date (2015)
+* Add plugin icon
+* Regenerate .pot
+
+= 3.5 (2014-01-11) =
+* Add setting to control if code should be preserved in posts (default is true)
+* Don't wrap 'pre' tags in 'pre' despite settings values
+* Update plugin framework to 037
+* Better singleton implementation:
+    * Add `get_instance()` static method for returning/creating singleton instance
+    * Make static variable 'instance' private
+    * Make constructor protected
+    * Make class final
+    * Additional related changes in plugin framework (protected constructor, erroring `__clone()` and `__wakeup()`)
+* Add unit tests
+* Add checks to prevent execution of code if file is directly accessed
+* Re-license as GPLv2 or later (from X11)
+* Add 'License' and 'License URI' header tags to readme.txt and plugin file
+* Use explicit path for require_once()
+* Discontinue use of PHP4-style constructor
+* Discontinue use of explicit pass-by-reference for objects
+* Remove ending PHP close tag
+* Minor documentation improvements
+* Minor code reformatting (spacing, bracing)
+* Note compatibility through WP 3.8+
+* Drop compatibility with version of WP older than 3.6
+* Add comments explaining use of base64_encode and base64_decode
+* Update copyright date (2014)
+* Regenerate .pot
+* Change plugin description (to make it shorter)
+* Change donate link
+* Omit final closing PHP tag
+* Add assets directory to plugin repository checkout
+* Update screenshot
+* Move screenshot into repo's assets directory
+* Add banner
 
 = 3.2 =
 * Fix bug with settings form not appearing in MS
@@ -179,6 +229,15 @@ Yes, shortcodes within code tags (or any tag processed by this plugin) will be o
 
 
 == Upgrade Notice ==
+
+= 3.6 =
+Minor update: added more unit tests; updated plugin framework to 039; noted compatibility through WP 4.1+; updated copyright date (2015); added plugin icon
+
+= 3.5 =
+Recommended update: fix bug where 'pre' tag could get wrapped in '<pre>' tag; added setting to disable preserving code in posts; added unit tests; updated plugin framework; compatibility now WP 3.6-3.8+
+
+= 3.3 =
+Minor update. Highlights: added setting to control if code should be preserved in posts; prevent 'pre' tag from getting wrapped in 'pre'; updated plugin framework.
 
 = 3.2 =
 Recommended update. Highlights: fixed bug with settings not appearing in MS; updated plugin framework; noted compatibility with WP 3.3+; dropped compatibility with versions of WP older than 3.1.
